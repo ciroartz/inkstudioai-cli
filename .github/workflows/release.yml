@@ -79,10 +79,11 @@ jobs:
 
       - name: Publish to the MCP Registry
         run: |
-          ./mcp-publisher login github-oidc
-          # The registry checks mcpName on npm, which can lag a few seconds behind the publish.
-          for attempt in 1 2 3 4 5; do
-            ./mcp-publisher publish && exit 0
-            sleep 20
+          # The registry checks the version and mcpName on npm. npm processes a new
+          # version for a few minutes before it shows it, so wait up to 10 minutes.
+          # Log in on each attempt: the registry token is short-lived.
+          for attempt in $(seq 1 20); do
+            ./mcp-publisher login github-oidc && ./mcp-publisher publish && exit 0
+            sleep 30
           done
           exit 1
