@@ -50,8 +50,16 @@ jobs:
             exit 1
           fi
 
+      # The first version is published by hand (npm can set up trusted
+      # publishing only for a package that exists), so skip a published version.
       - name: Publish to npm
-        run: npm publish --access public
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if npm view "inkstudioai@${version}" version >/dev/null 2>&1; then
+            echo "inkstudioai@${version} is already on npm, so this step skips the publish."
+          else
+            npm publish --access public
+          fi
 
       - name: Install mcp-publisher
         run: |
