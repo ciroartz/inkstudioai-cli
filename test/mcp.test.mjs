@@ -4,20 +4,16 @@ import { chmodSync, mkdtempSync, readFileSync, rmSync, statSync } from "node:fs"
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createInterface } from "node:readline";
-import { after, before, test } from "node:test";
+import { after, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { IMAGE_BYTES, VALID_KEY, startMockServer } from "./mock-server.mjs";
 
 const BIN = fileURLToPath(new URL("../bin/inkstudioai.js", import.meta.url));
 
-/** @type {Awaited<ReturnType<typeof startMockServer>>} */
-let api;
-let home = "";
+// Top-level await, not before(): see the note in cli.test.mjs.
+const api = await startMockServer();
+const home = mkdtempSync(join(tmpdir(), "inkstudioai-mcp-"));
 
-before(async () => {
-  api = await startMockServer();
-  home = mkdtempSync(join(tmpdir(), "inkstudioai-mcp-"));
-});
 after(async () => {
   await api.close();
   rmSync(home, { recursive: true, force: true });

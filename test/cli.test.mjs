@@ -3,17 +3,15 @@ import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, w
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Readable } from "node:stream";
-import { after, afterEach, before, beforeEach, describe, test } from "node:test";
+import { after, afterEach, beforeEach, describe, test } from "node:test";
 import { main } from "../src/cli.js";
 import { IMAGE_BYTES, OTHER_KEY, PRICING, VALID_KEY, startMockServer } from "./mock-server.mjs";
 
-/** @type {Awaited<ReturnType<typeof startMockServer>>} */
-let api;
+// Top-level await, not before(): Node 18 can run a top-level before() hook
+// after the beforeEach() hooks of a describe() suite.
+const api = await startMockServer();
 let home = "";
 
-before(async () => {
-  api = await startMockServer();
-});
 after(() => api.close());
 beforeEach(() => {
   home = mkdtempSync(join(tmpdir(), "inkstudioai-cli-"));

@@ -226,6 +226,9 @@ export async function startMockServer() {
   });
 
   await new Promise((done) => server.listen(0, "127.0.0.1", () => done(undefined)));
+  // Node 18 runs top-level after() hooks only once the event loop is empty, so
+  // a listening server would keep the test process alive forever.
+  server.unref();
   const address = /** @type {import("node:net").AddressInfo} */ (server.address());
   origin = `http://127.0.0.1:${address.port}`;
   return {
