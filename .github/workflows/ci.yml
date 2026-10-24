@@ -1,0 +1,29 @@
+name: CI
+
+# Runs the tests on every Node version that package.json "engines" supports.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["18.17", "20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # No dependencies, so no install step. Bash expands the glob, which Node 18 needs.
+      - name: Run the tests
+        run: node --test test/*.test.mjs

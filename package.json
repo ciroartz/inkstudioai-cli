@@ -1,0 +1,58 @@
+{
+  "name": "inkstudioai",
+  "version": "0.1.0",
+  "mcpName": "io.github.ciroartz/inkstudioai",
+  "description": "AI tattoo generator for the terminal and AI agents. Create tattoo designs with Ink Studio AI from the command line or as an MCP server for Claude, Cursor, and Windsurf.",
+  "keywords": [
+    "tattoo",
+    "tattoo generator",
+    "ai tattoo",
+    "ai tattoo generator",
+    "tattoo design",
+    "tattoo ideas",
+    "tattoo art",
+    "image generation",
+    "ai image generator",
+    "text to image",
+    "generative ai",
+    "cli",
+    "command line",
+    "mcp",
+    "mcp server",
+    "model context protocol",
+    "claude",
+    "claude code",
+    "claude desktop",
+    "cursor",
+    "windsurf",
+    "ai agent",
+    "inkstudioai",
+    "ink studio ai"
+  ],
+  "homepage": "https://inkstudioai.com/developers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ciroartz/inkstudioai-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ciroartz/inkstudioai-cli/issues",
+    "email": "help@inkstudioai.com"
+  },
+  "license": "MIT",
+  "author": "Ink Studio AI (https://inkstudioai.com)",
+  "type": "module",
+  "bin": {
+    "inkstudioai": "bin/inkstudioai.js",
+    "inkstudio": "bin/inkstudioai.js"
+  },
+  "files": [
+    "bin/",
+    "src/"
+  ],
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  }
+}

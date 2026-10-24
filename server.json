@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ciroartz/inkstudioai",
+  "title": "Ink Studio AI",
+  "description": "Generate AI tattoo designs in 13 styles, search a public tattoo gallery, and check plans.",
+  "websiteUrl": "https://inkstudioai.com/developers",
+  "repository": {
+    "url": "https://github.com/ciroartz/inkstudioai-cli",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "inkstudioai",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "mcp"
+        }
+      ],
+      "environmentVariables": [
+        {
+          "name": "INKSTUDIO_API_KEY",
+          "description": "Ink Studio AI API key (isk_...). Optional: without it, call the login tool to sign in.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

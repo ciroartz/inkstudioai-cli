@@ -1,0 +1,68 @@
+name: Release
+
+# Publishes the `inkstudioai` package to npm, then its server.json to the
+# MCP Registry. Release: set the same version in package.json and in both
+# version fields of server.json, merge, then push a tag `v<version>`.
+#
+# npm: trusted publishing (OIDC), so there is no npm token. On npmjs.com,
+# package inkstudioai > Settings > Trusted Publisher > GitHub Actions:
+# user ciroartz, repository inkstudioai-cli, workflow release.yml.
+# From a public repository, npm adds provenance on its own.
+#
+# MCP Registry: GitHub OIDC login, which owns the io.github.ciroartz/ namespace.
+
+on:
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Trusted publishing needs Node 22.14 or later and npm 11.5.1 or later.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: https://registry.npmjs.org
+
+      - name: Update npm
+        run: npm install -g npm@11
+
+      - name: Run the tests
+        run: node --test test/*.test.mjs
+
+      - name: Check that the tag, package.json, and server.json agree
+        run: |
+          version=$(node -p "require('./package.json').version")
+          server=$(node -p "const s = require('./server.json'); s.version + ' ' + s.packages[0].version")
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ] || [ "${server}" != "${version} ${version}" ]; then
+            echo "Tag ${GITHUB_REF_NAME}, package.json ${version}, and server.json (${server}) must match." >&2
+            exit 1
+          fi
+
+      - name: Publish to npm
+        run: npm publish --access public
+
+      - name: Install mcp-publisher
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+
+      - name: Publish to the MCP Registry
+        run: |
+          ./mcp-publisher login github-oidc
+          # The registry checks mcpName on npm, which can lag a few seconds behind the publish.
+          for attempt in 1 2 3 4 5; do
+            ./mcp-publisher publish && exit 0
+            sleep 20
+          done
+          exit 1
