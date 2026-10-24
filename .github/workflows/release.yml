@@ -26,17 +26,20 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # This job can prove its identity to npm, so actions and npm are pinned.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
 
       # Trusted publishing needs Node 22.14 or later and npm 11.5.1 or later.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22"
           registry-url: https://registry.npmjs.org
 
       - name: Update npm
-        run: npm install -g npm@11
+        run: npm install -g npm@11.21.1
 
       - name: Run the tests
         run: node --test test/*.test.mjs
@@ -51,8 +54,7 @@ jobs:
           fi
 
       # A pinned release with its SHA-256 (from registry_<version>_checksums.txt
-      # of that release): this job can prove its identity to npm, so it must
-      # not run whatever "latest" is. Change both values together.
+      # of that release), not whatever "latest" is. Change both values together.
       - name: Install mcp-publisher
         env:
           MCP_PUBLISHER_VERSION: v1.8.4

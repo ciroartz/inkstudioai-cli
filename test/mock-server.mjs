@@ -1,11 +1,11 @@
-// A local server that follows docs/public-api.md, for the CLI tests.
+// A local server that follows the public API (https://inkstudioai.com/api/v1/openapi.json), for the CLI tests.
 import { createServer } from "node:http";
 
 export const VALID_KEY = "isk_test_valid_key_0001";
 export const OTHER_KEY = "isk_test_other_key_0002";
 export const IMAGE_BYTES = Buffer.from("RIFF0000WEBPVP8 fake image bytes");
 
-/** The same plans and packs as src/lib/billing/catalog.ts, in its order. */
+/** The same plans and packs as GET /api/v1/pricing, in its order. */
 export const PRICING = {
   currency: "usd",
   pricingUrl: "https://inkstudioai.com/pricing",
