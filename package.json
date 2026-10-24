@@ -1,6 +1,6 @@
 {
   "name": "inkstudioai",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "mcpName": "io.github.ciroartz/inkstudioai",
   "description": "AI tattoo generator for the terminal and AI agents. Create tattoo designs with Ink Studio AI from the command line or as an MCP server for Claude, Cursor, and Windsurf.",
   "keywords": [

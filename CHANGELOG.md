@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+First release from GitHub Actions, with npm trusted publishing and provenance. The CLI and the MCP server behave as in 0.1.0.
+
+- The release workflow publishes without a token and pins its actions.
+
 ## 0.1.0
 
 First release.

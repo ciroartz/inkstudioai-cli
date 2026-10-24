@@ -80,7 +80,7 @@ describe("login", () => {
     }
     const device = api.requests.find((r) => r.path.endsWith("/auth/device"));
     assert.match(device?.body.clientName, /^inkstudioai CLI on /);
-    assert.match(String(device?.headers["user-agent"]), /^inkstudioai-cli\/0\.1\.0 \(node \d+/);
+    assert.match(String(device?.headers["user-agent"]), /^inkstudioai-cli\/0\.1\.1 \(node \d+/);
   });
 
   test("a denied request stops polling and saves nothing", async () => {
